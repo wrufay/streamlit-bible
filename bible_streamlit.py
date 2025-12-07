@@ -5,6 +5,23 @@ import requests
 
 st.set_page_config(page_title="Fay's Bible", page_icon="☻", layout="centered")
 
+SYSTEM_PROMPT = {
+    "role": "system",
+    "content": """You are a scholarly educator on the Bible.
+
+Rules:
+- Do not provide spiritual guidance
+- Provide context, clarification and insight into bible verses
+- Always cite specific Bible verses (Book Chapter:Verse) when relevant
+- Provide historical and cultural context when helpful
+- Be respectful of all Christian denominations as well as other religions
+- Keep responses clear and accessible
+- Type only in lowercase and have a chill vibe
+- If unsure, say so rather than making things up
+
+Tone: Warm, thoughtful, and encouraging."""
+}
+
 st.markdown("""
 <style>
     [data-testid="stChatMessageAvatarUser"],
@@ -19,9 +36,10 @@ st.markdown("""
 if "verse_results" not in st.session_state:
     st.session_state.verse_results = None
  
-st.title("`welcome ☻`")
+st.title("`☻ welcome`")
+st.markdown("`to your KJV bible & chat to guide you through your daily studies`")
 st.markdown("---")
-st.markdown("""<style>h1 { color: #1866cc }</style> <h1>lookup a chapter or verse in KJV:</h1>""", unsafe_allow_html=True)
+st.markdown("""<style>h1 { color: #1866cc }</style> <h1>lookup a chapter or verse:</h1>""", unsafe_allow_html=True)
 # want this color: #1866cc
 
 
@@ -54,7 +72,7 @@ with col2:
 
 with col3:
     st.markdown("<br>", unsafe_allow_html=True)
-    search_button = st.button("Search", type="primary")
+    search_button = st.button("Search", type="secondary")
 
 
 def get_verse(book, verse):
@@ -94,11 +112,10 @@ if search_button:
     else:
         st.warning("Please enter both a book name and verse.")
 
-# Always display stored verse results
 display_verse(st.session_state.verse_results)
         
 st.markdown("---")
-st.markdown("`chat with gpt 3.5 turbo`")
+
 
 # implement large language model
 
@@ -108,23 +125,36 @@ if "openai_model" not in st.session_state:
     st.session_state["openai_model"] = "gpt-3.5-turbo"
 
 if "messages" not in st.session_state:
-    st.session_state.messages = []
+    st.session_state.messages = [SYSTEM_PROMPT]
 
 for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
-        st.markdown(message["content"])
+    if message["role"] != "system":  
+        with st.chat_message(message["role"]):
+            st.markdown(message["content"])
 
-if prompt := st.chat_input("ask a question..."):
+if prompt := st.chat_input("need context or clarification?"):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
     with st.chat_message("assistant"):
+        # providing current verse or chapter for context if available
+        messages_to_send = [
+            {"role": m["role"], "content": m["content"]}
+            for m in st.session_state.messages
+        ]
+        if st.session_state.verse_results:
+            verse_text = "\n".join(
+                f'{v["verse"]}. {v["text"]}' for v in st.session_state.verse_results["verses"]
+            )
+            verse_context = {
+                "role": "system",
+                "content": f"The user is currently viewing {st.session_state.verse_results['reference']}:\n{verse_text}"
+            }
+            messages_to_send.insert(1, verse_context)
+
         stream = client.chat.completions.create(
             model=st.session_state["openai_model"],
-            messages=[
-                {"role": m["role"], "content": m["content"]}
-                for m in st.session_state.messages
-            ],
+            messages=messages_to_send,
             stream=True,
         )
         response = st.write_stream(stream)
