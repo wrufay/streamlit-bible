@@ -5,6 +5,10 @@ import requests
 
 st.set_page_config(page_title="Fay's Bible", page_icon="☻", layout="centered")
 
+if "verse_results" not in st.session_state:
+    st.session_state.verse_results = None
+ 
+st.title("`𝚢𝚘𝚞𝚛 𝚍𝚊𝚒𝚕𝚢 𝚋𝚛𝚎𝚊𝚍 ☻`")
 st.header("Search a Bible Verse in KJV")
 
 
@@ -21,6 +25,7 @@ with st.sidebar:
     
     
     """)
+    st.markdown("---")
     st.markdown("""
                 <div style='text-align: center; color: gray;'>
                 <small>Made with ❤️ by Fay</small>
@@ -46,35 +51,43 @@ def get_verse(book, verse):
         response = requests.get(url)
         if response.status_code == 404:
             st.error("Error! Please enter a valid book and verse.")
-            return
+            return None
         elif response.status_code == 200: # if successful
-            bible_content = response.json()
-            st.markdown("---")
-            st.badge(f"{bible_content['reference']}", color="blue")
-            verses = bible_content["verses"]
-            
-            for v in verses:
-                with st.container():
-                    st.write(f'`{v['verse']}` {v['text']}')
-        
+            return response.json()
         else:
             # catch errors
             st.warning(f"Unexpected error. (Status code: {response.status_code})")
+            return None
     except Exception as e:
         st.error(f"An error occurred: {str(e)}")
+        return None
+
+def display_verse(bible_content):
+    if bible_content:
+        st.markdown("---")
+        st.badge(f"{bible_content['reference']}", color="blue")
+        for v in bible_content["verses"]:
+            with st.container():
+                st.write(f'`{v["verse"]}` {v["text"]}')
 
 
 if search_button:
     if book and verse:
         with st.spinner("..."):
-            get_verse(book, verse)
+            result = get_verse(book, verse)
+            if result:
+                st.session_state.verse_results = result
     elif book and not verse:
         st.warning("Please enter a chapter and verse.")
     else:
         st.warning("Please enter both a book name and verse.")
+
+# Always display stored verse results
+display_verse(st.session_state.verse_results)
         
 
 st.markdown("---")
+st.markdown("`𝚊𝚜𝚔 𝚚𝚞𝚎𝚜𝚝𝚒𝚘𝚗𝚜 𝚋𝚎𝚕𝚘𝚠 𝚝𝚘 𝚘𝚞𝚛 𝚜𝚒𝚕𝚕𝚢 𝚕𝚒𝚝𝚝𝚕𝚎 𝙻𝙻𝙼 𝚏𝚘𝚛 𝚋𝚊𝚜𝚒𝚌 𝚋𝚒𝚋𝚕𝚒𝚌𝚊𝚕 𝚐𝚞𝚒𝚍𝚊𝚗𝚌𝚎! (𝚐𝚙𝚝-𝟹.𝟻-𝚝𝚞𝚛𝚋𝚘)`")
 
 # implement large language model
 
