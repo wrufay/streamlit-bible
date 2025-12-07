@@ -16,13 +16,13 @@ st.header("Search a Bible Verse in KJV")
 with st.sidebar:
     st.header("Search Instructions")
     st.markdown("""
-    - Search an `entire chapter` like :red[Philippians 4]
+    - Search an `entire chapter` like :red[**Philippians 4**]
     
-    - Search a `single verse` like :red[Jeremiah 29:11]
+    - Search a `single verse` like :red[**Jeremiah 29:11**]
     
-    - Search for a `range of verses` like :red[Matthew 6:25-34]
+    - Search for a `range of verses` like :red[**Matthew 6:25-34**]
     
-    - Search for `multiple chapters` like :red[Genesis 1-2] or :red[John 3:16-4:10]
+    - Search for `multiple chapters` like :red[**John 3:16-4:10**]
     
     """)
     st.markdown("---")
