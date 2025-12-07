@@ -20,7 +20,7 @@ if "verse_results" not in st.session_state:
     st.session_state.verse_results = None
  
 st.title("`welcome ☻`")
-st.write("open your bible today <3")
+st.write("wip, just for fun!")
 st.markdown("---")
 st.markdown("""<style>h1 { color: #1866cc }</style> <h1>Search a Bible Verse in KJV</h1>""", unsafe_allow_html=True)
 # want this color: #1866cc
