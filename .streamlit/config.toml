@@ -4,7 +4,7 @@ primaryColor="#ed665f"
 backgroundColor="#faeee1"
 secondaryBackgroundColor="#fff"
 textColor="#333"
-font="monospace"
+font="sans-serif"
 
 [theme.sidebar]
 font="sans-serif"
