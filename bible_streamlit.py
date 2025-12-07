@@ -99,7 +99,7 @@ if search_button:
 display_verse(st.session_state.verse_results)
         
 st.markdown("---")
-st.markdown("`ask questions below to our silly little LLM (gpt 3.5 turbo)`")
+st.markdown("`ask questions below to our silly little gpt 3.5 turbo`")
 
 # implement large language model
 
