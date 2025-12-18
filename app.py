@@ -19,7 +19,7 @@ from streamlit_js_eval import streamlit_js_eval
 supabase = create_client(st.secrets["SUPABASE_URL"], st.secrets["SUPABASE_KEY"])
 
 # setup page
-st.set_page_config(page_title="daily bread 𓍯𓂃✍︎", page_icon="bread.ico", layout="centered")
+st.set_page_config(page_title="daily bread ✎𓂃", page_icon="bread.ico", layout="centered")
 
 # login authentication featurss
 def init_auth_state():
@@ -61,7 +61,7 @@ def auth_modal():
                     st.rerun()
 
                 except Exception as e:
-                    st.error(f"Login failed: {str(e)}")
+                    st.error({str(e)})
             else:
                 st.error("Please enter both email and password")
 
@@ -188,10 +188,10 @@ def parse_reference(reference):
         return book, verse
     return None, None
 
-@st.dialog(" ")
+@st.dialog("Saving bookmark for...")
 def save_verse_modal(reference, translation):
     """Modal to save a verse with optional notes"""
-    st.write(f"Saving **{reference}** ({translation})")
+    st.write(f"**{reference}** in {translation}")
 
     notes_input = st.text_area("Add notes", key="modal_verse_notes", placeholder="", height=67)
 
@@ -199,16 +199,17 @@ def save_verse_modal(reference, translation):
         if save_verse_reference(reference, translation, notes_input):
             st.rerun()
 
-@st.dialog(" ")
+@st.dialog("View bookmark")
 def verse_detail_modal(verse):
-    st.subheader(f"{verse['reference']} ({verse['translation']})")
+    st.subheader(f"{verse['reference']} in {verse['translation']}")
     
     # get notes
     if verse.get('notes') and verse['notes'].strip():
         st.markdown("**your notes:**")
         st.info(verse['notes'])
     else:
-        st.caption("No notes for this bookmark.")
+        # maybe make a way you can add notes / edit
+        st.caption("No notes written.")
 
     col1, col2 = st.columns(2)
     
@@ -313,7 +314,7 @@ with st.sidebar:
             st.caption("No bookmarks here yet!")
         else:
             for verse in saved_verses:
-                if st.button(f"{verse['reference']}", key=f"verse_{verse['id']}"):
+                if st.button(f"✱ {verse['reference']}", key=f"verse_{verse['id']}"):
                     verse_detail_modal(verse)
 
     else: # if user is not logged in, don't show
@@ -437,8 +438,9 @@ def display_verse(bible_content, translation="kjv"):
         
         # show save verse button only if logged in
         if st.session_state.user:
-            if st.button("Make bookmark"):
+            if st.button(f"✏︎ Bookmark {reference}", use_container_width=True):
                 save_verse_modal(reference, translation.upper())
+                
                 
         # link to enduring word bible commentary
         st.page_link(label=f'Read commentary on this chapter from :blue[**Enduring Word**]', page=enduring_word_path)
