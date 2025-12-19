@@ -4,6 +4,9 @@ showSidebarNavigation = false
 [ui]
 hideSidebarNav = true
 
+[browser]
+gatherUsageStats = false
+
 [theme]
 base="light"
 primaryColor="#ed665f"
