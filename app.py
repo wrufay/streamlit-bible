@@ -19,7 +19,7 @@ from streamlit_js_eval import streamlit_js_eval
 supabase = create_client(st.secrets["SUPABASE_URL"], st.secrets["SUPABASE_KEY"])
 
 # setup page
-st.set_page_config(page_title="✱ daily bread bible", page_icon="bread.ico", layout="centered")
+st.set_page_config(page_title="daily bread bible", page_icon="bread.ico", layout="centered")
 
 # login authentication featurss
 def init_auth_state():
@@ -278,27 +278,7 @@ st.markdown("""
     .stForm small {
         display: none !important;
     }
-
-    /*hide streamlit footer*/
-    footer {
-        visibility: hidden !important;
-        display: none !important;
-    }
-    footer::after {
-        visibility: hidden !important;
-        display: none !important;
-    }
 </style>
-""", unsafe_allow_html=True)
-
-# JavaScript to remove footer completely
-st.markdown("""
-<script>
-    var footer = window.parent.document.getElementsByTagName("footer")[0];
-    if (footer) {
-        footer.style.display = "none";
-    }
-</script>
 """, unsafe_allow_html=True)
 
 # init
