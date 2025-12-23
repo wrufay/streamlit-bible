@@ -3,13 +3,16 @@ import streamlit as st
 import requests
 from datetime import datetime
 from zoneinfo import ZoneInfo
+import os
 # scratched the clipboard thing but might come back to it
 # from st_copy_to_clipboard import st_copy_to_clipboard
 from supabase import create_client
 from streamlit_js_eval import streamlit_js_eval
 
-# setup supabase
-supabase = create_client(st.secrets["SUPABASE_URL"], st.secrets["SUPABASE_KEY"])
+# setup supabase - support both secrets.toml and environment variables
+SUPABASE_URL = os.getenv("SUPABASE_URL") or st.secrets.get("SUPABASE_URL")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY") or st.secrets.get("SUPABASE_KEY")
+supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 # setup page
 st.set_page_config(page_title="my۫bible ꣑ৎ", page_icon="jesus.png", layout="centered")
@@ -477,7 +480,8 @@ display_verse(st.session_state.verse_results, current_translation)
 
 
 # implement large language model kekw
-client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY") or st.secrets.get("OPENAI_API_KEY")
+client = OpenAI(api_key=OPENAI_API_KEY)
 
 if "openai_model" not in st.session_state:
     st.session_state["openai_model"] = "gpt-3.5-turbo"

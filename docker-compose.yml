@@ -6,11 +6,14 @@ services:
     ports:
       - "8502:8501"
     volumes:
-      # Mount secrets file (you'll need to ensure this exists)
-      - ./.streamlit/secrets.toml:/app/.streamlit/secrets.toml:ro
+      # Mount config file for theme settings
       - ./.streamlit/config.toml:/app/.streamlit/config.toml:ro
     restart: unless-stopped
     environment:
-      # Optional: Override any environment variables here
+      # Streamlit settings
       - STREAMLIT_SERVER_PORT=8501
       - STREAMLIT_SERVER_ADDRESS=0.0.0.0
+      # App secrets - load from local secrets file for local development
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_KEY=${SUPABASE_KEY}
