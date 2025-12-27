@@ -299,6 +299,13 @@ st.markdown("""
     /* center all headings and paragraphs */
     .main h1, .main h2, .main h3, .main p {
         text-align: center !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+
+    /* center markdown elements */
+    .main div[data-testid="stMarkdownContainer"] {
+        text-align: center !important;
     }
 
     /* sidebar styling */
