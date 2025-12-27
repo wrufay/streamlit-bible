@@ -6,26 +6,18 @@ from zoneinfo import ZoneInfo
 import os
 import base64
 
-
-# removed st_tailwind - was causing alignment issues
-
-
-
+# removed st_tailwind - was doing more harm than good. lol
 # scratched the clipboard thing but might come back to it
 # from st_copy_to_clipboard import st_copy_to_clipboard
+
 from supabase import create_client
 from streamlit_js_eval import streamlit_js_eval
 
-# setup supabase - support both secrets.toml and environment variables
 SUPABASE_URL = os.getenv("SUPABASE_URL") or st.secrets.get("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY") or st.secrets.get("SUPABASE_KEY")
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-# setup page
 st.set_page_config(page_title="you are loved. ꣑ৎ", page_icon="logo.png", layout="centered", initial_sidebar_state="expanded")
-
-
-
 
 # login authentication featurss
 def init_auth_state():
@@ -401,10 +393,9 @@ if "user_tz" not in st.session_state:
 tz_string = streamlit_js_eval(js_expressions="Intl.DateTimeFormat().resolvedOptions().timeZone", key="tz")
 if tz_string:
     st.session_state.user_tz = tz_string
- 
- 
+
 # title and header of page
-st.markdown("<p style='color: #f56476; text-align: center;'>The Bible is more than a book; it's God's love letter to you</p>", unsafe_allow_html=True)
+st.markdown("<p style='color: #f56476; text-align: center;'>The Bible is more than a book; it's God's love letter to you ꣑ৎ</p>", unsafe_allow_html=True)
 
 # encode letter image to base64 for inline display
 def get_base64_image(image_path):
@@ -412,7 +403,7 @@ def get_base64_image(image_path):
         return base64.b64encode(img_file.read()).decode()
 
 letter_img_base64 = get_base64_image("letter.png")
-st.markdown(f"<h2 style='text-align: center;'>You are <em>firstloved</em>, open it <img src='data:image/png;base64,{letter_img_base64}' width='30' style='vertical-align: middle;'> today. ꣑ৎ</h2>", unsafe_allow_html=True)
+st.markdown(f"<h2 style='text-align: center;'>You are <em>firstloved</em>, open it <img src='data:image/png;base64,{letter_img_base64}' width='30' style='vertical-align: middle;'> today.</h2>", unsafe_allow_html=True)
 # note: #1866cc
 
 
@@ -425,7 +416,7 @@ with st.sidebar:
     except:
         user_tz = ZoneInfo("America/Los_Angeles")
     now = datetime.now(user_tz)
-    st.markdown(f"<p style='color: #333;'>It's {now.strftime('%I:%M%p').lstrip('0')} on a {now.strftime('%A')} & you just recieved a letter.</p>", unsafe_allow_html=True)
+    st.markdown(f"<p style='color: #333;'>It's {now.strftime('%I:%M%p').lstrip('0')} on a {now.strftime('%A')} & you just recieved a letter. Ask Claude where to start reading ˚꩜｡</p>", unsafe_allow_html=True)
 
 
     # check if user is logged in , display dif things
@@ -516,13 +507,12 @@ with btn_col1:
     if "show_ai_chat" not in st.session_state:
         st.session_state.show_ai_chat = False
 
-    if st.button("˚꩜｡ Ask Claude" if not st.session_state.show_ai_chat else "˚꩜｡ Hide", use_container_width=True):
+    if st.button("Ask Claude" if not st.session_state.show_ai_chat else "Hide", use_container_width=True):
         st.session_state.show_ai_chat = not st.session_state.show_ai_chat
         st.rerun()
 with btn_col2:
     search_button = st.button("Search passage ⭑.ᐟ", use_container_width=True)
     
-
 
 # get the verse with bible api
 def get_verse(book, verse, translation):
