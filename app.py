@@ -289,27 +289,36 @@ st.markdown("""
     }
 
     /* center ALL main content */
+    section.main > div {
+        display: flex !important;
+        justify-content: center !important;
+    }
+
     .main .block-container {
         text-align: center !important;
-        max-width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
     }
 
     .main .block-container > div {
         text-align: center !important;
+        width: 100% !important;
     }
 
-    .main h1, .main h2, .main h3, .main p, .main div {
+    .main h1, .main h2, .main h3, .main p {
         text-align: center !important;
     }
 
-    /* center columns */
+    /* center input groups and columns */
+    .main [data-testid="stHorizontalBlock"] {
+        justify-content: center !important;
+    }
+
     .main [data-testid="column"] {
-        text-align: center !important;
-    }
-
-    /* center all form elements */
-    .main [data-testid="stVerticalBlock"] > div {
-        text-align: center !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
     }
 
     /* sidebar styling */
