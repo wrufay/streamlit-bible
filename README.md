@@ -1,30 +1,41 @@
-## bible app, reinvented.
+### the Bible: the greatest love letter we could ever recieve. ꣑ৎ
 
-**introducing your new bible study buddy.**
-no more clunky features that get in the way of the word, just search a verse and get exactly what you want.
-featuring:
+**Why I made _firstloved_**
 
-- a biblical ai chatbot powered by claude 4.5 opus for easy context searching, clarifications or definitions right **_on the spot_**
-- login to make an account and **_save verses_** with or without notes, easily visible in the sidebar **_organized_** by book name
-- **_four different bible translations_** to suit your needs, with quick fetching and **_simple ui_**, allowing you to focus on the content rather than distractions.
+- This project actually started when I was learning Python in the summer this year. I decided to make a simple Bible searching program to practice integrating RESTful APIs.
 
-**tech stack:**
+- As time went on, I realized that in my own day to day Bible studies using the YouVersion Bible app and many others, there were small features I didn't like, and increased friction - even if miniscule, towards opening my Bible and studying it.
 
-- made purely using **_python_** with the **_streamlit_** framework.
-- **apis and databases:** this app uses Claude API, supabase, and bible api from https://bible-api.com
-- deployed on **_render_** using **_docker_** to package the app.
+- For instance, in the YouVersion app - you can't simply search up a specific passage and see it immediately. You can only see certain verses at a time or open up the entire book and find the passage you want yourself.
 
-no more jumping around, navigating through a sea of google tabs during your daily bible study. one stop, dailybread.
+**Features**
 
-**how to use (to supplement your bible studies)**
+- Right now, _firstloved_ is a fully working Bible, with 4 translation options (working on adding more!) that has a simple, easy to use interface. You can also create an account if you want to save passages or make notes.
 
-1. visit https://dailybread.streamlit.app
-2. wake up the app if it's asleep
-3. open up your irl bible
-4. search up the passage you're studying
-5. whenever you run into something that confuses you or a word you dont know - simply ask the chat! it knows what passage you're looking at, so you dont need to feed it context. simply ask "what does ... mean?"
-6. use the link provided for enduring word bible commentary for detailed real life explanations
-7. create an account / log in to save your passages and notes for easy access
+- Now, you no longer need to open tons of tabs (as I always had to) just to read your Bible. With an in-app Bible buddy powered by Claude that reads your current open passage for context, you now have definitions, clarifications and insight right at your fingertips.
 
-it's that simple! reducing the friction to open your bible -> get more out of the word of God.
-no more having to open a million tabs, and more of making this habit easier.
+- Of course, we can't rely on AI to understand scripture. I also included links to my favourite Bible commentary platform, Enduring Word every time you search a passage. ☺︎
+
+**Tech stack**
+
+- Written entirely in **Python** using the **Streamlit** framework, with plain **CSS** for custom styling. User authentication and data stored using **Supabase**.
+- Powered by Claude using **Anthropic API**, and gets Bible information from https://bible-api.com/
+- Containerized with **Docker** and deployed on **Render** using **Cloudflare** for the custom domain.
+
+**Check it out - live at *https://firstloved.cc*!**
+
+**Currently working on:**
+
+- Lots of bugs, just to name a few:
+
+  - Want to kep user logged in after refreshing (and maybe even their current chat conversation / state)
+  - Order the saved verses better (in order of book)
+  - Can only search max. 2 chapters at a time (seems like an API issue)
+
+- UI/UX: customizing Streamlit design has been a learning curve! Going to keep it like this for now, and slowly iterate as I dive more into it.
+
+- Community features. This has been the ultimate goal of creating a Bible app from the beginning, but has yet to be brought to fruition!
+
+This project is open source, I'm also _open to collaborate and open to feedback!_
+
+Thanks for stopping by. Hope you get to open your letter today, have a good one ♡
