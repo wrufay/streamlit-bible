@@ -404,7 +404,7 @@ if tz_string:
  
  
 # title and header of page
-st.markdown("<p style='color: #f56476;'>The Bible is more than a book; it's God's love letter to you</p>", unsafe_allow_html=True)
+st.markdown("<p style='color: #f56476; text-align: center;'>The Bible is more than a book; it's God's love letter to you</p>", unsafe_allow_html=True)
 
 # encode letter image to base64 for inline display
 def get_base64_image(image_path):
