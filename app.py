@@ -289,37 +289,16 @@ st.markdown("""
         background: linear-gradient(135deg, #ffeef2, #ffe0e9);
     }
 
-    /* center ALL main content */
-    section.main > div {
-        display: flex !important;
-        justify-content: center !important;
-    }
-
+    /* center main content container */
     .main .block-container {
+        margin-left: auto !important;
+        margin-right: auto !important;
         text-align: center !important;
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
     }
 
-    .main .block-container > div {
-        text-align: center !important;
-        width: 100% !important;
-    }
-
+    /* center all headings and paragraphs */
     .main h1, .main h2, .main h3, .main p {
         text-align: center !important;
-    }
-
-    /* center input groups and columns */
-    .main [data-testid="stHorizontalBlock"] {
-        justify-content: center !important;
-    }
-
-    .main [data-testid="column"] {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
     }
 
     /* sidebar styling */
