@@ -22,7 +22,7 @@
 - Powered by Claude using **Anthropic API**, and gets Bible information from https://bible-api.com/
 - Containerized with **Docker** and deployed on **Render** using **Cloudflare** for the custom domain.
 
-## Currently working on: ˚⟡˖ ࣪\*\*
+## Currently working on: ˚⟡˖
 
 - **Lots of bugs**, just to name a few:
 
