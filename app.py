@@ -604,7 +604,7 @@ if st.session_state.get("show_ai_chat", False):
     client = Anthropic(api_key=ANTHROPIC_API_KEY)
 
     if "anthropic_model" not in st.session_state:
-        st.session_state["anthropic_model"] = "claude-opus-4-5"
+        st.session_state["anthropic_model"] = "claude-sonnet-4-5"
 
     if "messages" not in st.session_state:
         st.session_state.messages = []
