@@ -7,7 +7,7 @@ hideSidebarNav = true
 
 [theme]
 base="light"
-secondaryBackgroundColor="#fff"
+secondaryBackgroundColor="#fcfcfa"
 backgroundColor="#F7F3E3"
 textColor="#2B2118"
 

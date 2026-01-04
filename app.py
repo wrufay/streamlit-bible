@@ -257,7 +257,7 @@ if tz_string:
     st.session_state.user_tz = tz_string
 
 # title and header of page
-st.html("<p class='nanum-myeongjo-regular'>1 John 4:19 ꣑ৎ We love because he first loved us.</p>")
+st.html("<p>1 John 4:19 ꣑ৎ We love because he first loved us.</p>")
 
 # encode letter image to base64 for inline display
 def get_base64_image(image_path):
@@ -265,7 +265,7 @@ def get_base64_image(image_path):
         return base64.b64encode(img_file.read()).decode()
 
 emoji_img_base64 = get_base64_image("reading.png")
-st.html(f"<h1 class='nanum-pen-script-regular front-title'>You are firstloved, read <img src='data:image/png;base64,{emoji_img_base64}' width='28'> today.</h1>")
+st.html(f"<h1 class='nanum-pen-script-regular front-title'>You are firstloved, let's <img src='data:image/png;base64,{emoji_img_base64}' width='30'> read</h1>")
 
 
 # sidebar!
@@ -277,7 +277,7 @@ with st.sidebar:
     except:
         user_tz = ZoneInfo("America/Los_Angeles")
     now = datetime.now(user_tz)
-    st.html(f"<p>It's {now.strftime('%I:%M%p').lstrip('0')} on a {now.strftime('%A')} & you just recieved a letter. Ask Claude where to start reading ˚꩜｡</p>")
+    st.html(f"<p>It's {now.strftime('%I:%M%p').lstrip('0')} on a {now.strftime('%A')}.</p>")
 
 
     # check if user is logged in , display dif things
@@ -307,15 +307,11 @@ with st.sidebar:
 
     st.markdown("---")
     st.html("<h2 class='nanum-pen-script-regular'>Search Instructions</h2>")
-    st.markdown("""
-    - Search an **entire chapter** like :red[**Philippians 4**]
-    
-    - Search a **single verse** like :red[**Jeremiah 29:11**]
-    
-    - Search for a **range of verses** like :red[**Matthew 6:25-34**]
-    
-    - Search for **multiple chapters** like :red[**John 3:16-4:10**]
-    
+    st.html("""
+    <p>Search an entire chapter like <span style='color: var(--red);'>Philippians 4</p>
+    <p>Search a single verse like <span style='color: var(--red);'>Jeremiah 29:11</p>
+    <p>Search a range of verses like <span style='color: var(--red);'>Matthew 6:25-34</p>
+    <p>Search multiple chapters like <span style='color: var(--red);'>John 3:16-4:10</p>
     """)
     
     # mini feedback bar for funsies
@@ -333,7 +329,7 @@ with st.sidebar:
     st.markdown("---")
     st.html("""
                 <div class='sidebar-footer'>
-                <small>Made with ♡ by <a href="https://github.com/wrufay/first-loved" target="_blank">Fay Wu</a></small>
+                <small>Made with ♡ by <a class='sidebar-footer' href="https://github.com/wrufay/first-loved" target="_blank">Fay Wu</a></small>
                 </div>
                 """)
     
@@ -423,7 +419,7 @@ def display_verse(bible_content, translation="kjv"):
 
         enduring_word_path = f'https://enduringword.com/bible-commentary/{pr}{ch}-{ve}/'
         for v in bible_content["verses"]:
-            st.html(f'<p class="bible-text"><code>{v["verse"]}</code> {v["text"]}</p>')
+            st.html(f'<p class="bible-text">{v["verse"]} {v["text"]}</p>')
 
             
         st.markdown("---")
@@ -436,7 +432,7 @@ def display_verse(bible_content, translation="kjv"):
                 
                 
         # link to enduring word bible commentary
-        st.page_link(label=f'Read commentary on this chapter from :red[**Enduring Word**]', page=enduring_word_path)
+        st.page_link(label=f'Read commentary from :red[**Enduring Word**]', page=enduring_word_path)
             
         st.markdown("---")
         
