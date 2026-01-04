@@ -5,19 +5,24 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 import os
 import base64
-
-# removed st_tailwind - was doing more harm than good. lol
-# scratched the clipboard thing but might come back to it
-# from st_copy_to_clipboard import st_copy_to_clipboard
-
 from supabase import create_client
 from streamlit_js_eval import streamlit_js_eval
+
+
+# COLOUR SCHEME
+# AF9164 - olive brown
+# F7F3E3 - offwhite
+# B3B6B7 - light gray
+# 6F1A07 - red
+# 2B2118 - dark brown
+
+
 
 SUPABASE_URL = os.getenv("SUPABASE_URL") or st.secrets.get("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY") or st.secrets.get("SUPABASE_KEY")
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-st.set_page_config(page_title="you are loved. ꣑ৎ", page_icon="logo.png", layout="centered", initial_sidebar_state="expanded")
+st.set_page_config(page_title="Bible App", page_icon="flower.png", layout="centered", initial_sidebar_state="expanded")
 
 # login authentication featurss
 def init_auth_state():
@@ -25,18 +30,14 @@ def init_auth_state():
     if "user" not in st.session_state:
         st.session_state.user = None
     if "auth_mode" not in st.session_state:
-        st.session_state.auth_mode = "login"  # 'login', 'signup', or 'reset'
+        st.session_state.auth_mode = "login" # state
 
 @st.dialog(" ")
 def auth_modal():
-    """Combined modal for login, signup, and password reset"""
-    #logo
-    # st.image("bread.ico", width=67)
-    # NOTE: need to fix the forgot password, actually add the logic
     tab1, tab2 = st.tabs(["Log in ⊹₊˚", "I'm new here"]) 
 
     with tab1:
-        # LOGIN
+        # 1. LOGIN
         login_email = st.text_input("Email", key="login_email")
         login_password = st.text_input("Password", type="password", key="login_password")
 
@@ -64,7 +65,7 @@ def auth_modal():
                 st.error("Please enter both email and password")
 
     with tab2:
-        # SIGN UP
+        # 2. SIGN UP
         st.write("Don't have an account? Create one today ☻")
         signup_email = st.text_input("Email", key="signup_email")
         signup_password = st.text_input("Password (min 6 characters)", type="password", key="signup_password")
@@ -78,7 +79,7 @@ def auth_modal():
                     st.error("Password must be at least 6 characters")
                 else:
                     try:
-                        # Supabase sign up
+                        # supabase sign up
                         response = supabase.auth.sign_up({
                             "email": signup_email,
                             "password": signup_password
@@ -99,24 +100,7 @@ def auth_modal():
             else:
                 st.error("Please fill in all fields")
 
-    # FORGOT PASSWORD 
-    # with tab3:
-    #     # PASSWORD RESET
-    #     st.write("Enter your email to receive a password reset link")
-    #     reset_email = st.text_input("Email", key="reset_email")
-    #
-    #     if st.button("Send Reset Link", key="reset_btn"):
-    #         if reset_email:
-    #             try:
-    #                 supabase.auth.reset_password_email(reset_email)
-    #                 st.success("Password reset link sent! Check your email.")
-    #             except Exception as e:
-    #                 st.error(f"Failed to send reset link: {str(e)}")
-    #         else:
-    #             st.error("Please enter your email")
-
 def logout():
-    """Log out the current user"""
     try:
         supabase.auth.sign_out()
         st.session_state.user = None
@@ -127,7 +111,6 @@ def logout():
         st.error(f"Logout failed: {str(e)}")
 
 def save_verse_reference(reference, translation, notes=""):
-    """Save a verse reference to the database"""
     if not st.session_state.user:
         st.error("Please sign in to save verses")
         return False
@@ -136,7 +119,7 @@ def save_verse_reference(reference, translation, notes=""):
         # avoid duplicates
         existing = supabase.table("saved_verses").select("id").eq("user_id", st.session_state.user.id).eq("reference", reference).execute()
         if existing.data:
-            st.warning(f"{reference} is already saved!", icon="⚠️")
+            st.warning(f"{reference} is already saved.")
             return False
 
         supabase.table("saved_verses").insert({
@@ -153,7 +136,6 @@ def save_verse_reference(reference, translation, notes=""):
 
 
 def get_saved_verses():
-    """Get all saved verses for the current user"""
     if not st.session_state.user:
         return []
 
@@ -165,7 +147,6 @@ def get_saved_verses():
         return []
 
 def group_verses_by_book(verses):
-    """Group verses by their book name"""
     from collections import defaultdict
     grouped = defaultdict(list)
 
@@ -179,7 +160,6 @@ def group_verses_by_book(verses):
     return dict(grouped)
 
 def delete_saved_verse(verse_id):
-    """Delete a saved verse"""
     try:
         supabase.table("saved_verses").delete().eq("id", verse_id).execute()
         return True
@@ -188,7 +168,6 @@ def delete_saved_verse(verse_id):
         return False
 
 def parse_reference(reference):
-    """Parse reference like 'Genesis 1:1' into book and verse"""
     parts = reference.split()
     if len(parts) >= 2:
         if parts[0].isdigit() and len(parts) >= 3:
@@ -202,7 +181,6 @@ def parse_reference(reference):
 
 @st.dialog("Saving bookmark for...")
 def save_verse_modal(reference, translation):
-    """Modal to save a verse with optional notes"""
     st.write(f"**{reference}** in {translation}")
 
     notes_input = st.text_area("Add notes", key="modal_verse_notes", placeholder="", height=67)
@@ -217,7 +195,7 @@ def verse_detail_modal(verse):
     
     # get notes
     if verse.get('notes') and verse['notes'].strip():
-        st.markdown(f':red[{verse["notes"]}]')
+        st.markdown(f'{verse["notes"]}')
     else:
         # maybe make a way you can add notes / edit
         st.caption("No notes written.")
@@ -241,7 +219,7 @@ def verse_detail_modal(verse):
                 st.rerun()
 
 
-# setup gpt wrapper
+# setup claude wrapper prompt
 SYSTEM_PROMPT = {
     "role": "system",
     "content": """You are a scholarly educator on the Bible.
@@ -258,128 +236,12 @@ Rules:
 Tone: Warm, thoughtful, and encouraging."""
 }
 
-# css custom styling changes
-st.markdown("""
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Shizuru&family=Yomogi&display=swap');
+# load custom styling
+def load_css(file_path):
+    with open(file_path) as f:
+        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-    /*hide the AI profile pictures too corny LOL*/
-    [data-testid="stChatMessageAvatarUser"],
-    [data-testid="stChatMessageAvatarAssistant"],
-    .stChatMessage img,
-    .stChatMessage svg {
-        display: none !important;
-    }
-    /*hide the text inside the feedback form (too crowded)*/
-    .stForm [data-testid="stFormSubmitButton"]::after {
-        display: none !important;
-    }
-    .stForm small {
-        display: none !important;
-    }
-    .stApp {
-        background: linear-gradient(135deg, #ffeef2, #ffe0e9);
-    }
-
-    /* center main content container */
-    .main .block-container {
-        margin-left: auto !important;
-        margin-right: auto !important;
-        text-align: center !important;
-    }
-
-    /* center all headings and paragraphs */
-    .main h1, .main h2, .main h3, .main p {
-        text-align: center !important;
-        margin-left: auto !important;
-        margin-right: auto !important;
-    }
-
-    /* center markdown elements */
-    .main div[data-testid="stMarkdownContainer"] {
-        text-align: center !important;
-    }
-
-    /* sidebar styling */
-    [data-testid="stSidebar"] {
-        background-color: #fff5f7 !important;
-    }
-    [data-testid="stSidebar"] > div:first-child {
-        background-color: #fff5f7 !important;
-    }
-    [data-testid="stSidebar"] * {
-        text-align: left !important;
-    }
-    /* center footer in sidebar */
-    [data-testid="stSidebar"] .sidebar-footer {
-        text-align: center !important;
-    }
-    [data-testid="stSidebar"] .sidebar-footer * {
-        text-align: center !important;
-    }
-
-    /* chat message styling */
-    .stChatMessage {
-        text-align: left !important;
-    }
-    .stChatMessage * {
-        text-align: left !important;
-    }
-
-    /* claude AI chat text color */
-    [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarAssistant"]) {
-        color: #333 !important;
-    }
-    [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarAssistant"]) p,
-    [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarAssistant"]) div {
-        color: #333 !important;
-    }
-
-    /* user chat text color */
-    [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarUser"]) {
-        color: #f56476 !important;
-    }
-    [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarUser"]) p,
-    [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarUser"]) div {
-        color: #f56476 !important;
-    }
-
-    /* remove background from user messages */
-    [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarUser"]) {
-        background-color: transparent !important;
-    }
-    [data-testid="stChatMessage"] [data-testid="stChatMessageContent"] {
-        background-color: transparent !important;
-    }
-    .stChatMessage:has([data-testid="stChatMessageAvatarUser"]) {
-        background-color: transparent !important;
-    }
-    .stChatMessage:has([data-testid="stChatMessageAvatarUser"]) > div {
-        background-color: transparent !important;
-    }
-
-    /* bible verse text */
-    .text-black {
-        text-align: left !important;
-    }
-    .text-\[\#522e38\] {
-        text-align: left !important;
-    }
-    [class*="text-"] {
-        text-align: left !important;
-    }
-
-    * {
-        font-family: "yomogi", monospace;
-    }
-    body {
-        display:flex;
-        align-items:center;
-        justify-content: center;
-        text-align: center;
-    }
-</style>
-""", unsafe_allow_html=True)
+load_css("style.css")
 
 # init
 init_auth_state()
@@ -395,16 +257,15 @@ if tz_string:
     st.session_state.user_tz = tz_string
 
 # title and header of page
-st.markdown("<p style='color: #f56476; text-align: center;'>The Bible is more than a book; it's God's love letter to you ꣑ৎ</p>", unsafe_allow_html=True)
+st.html("<p class='nanum-myeongjo-regular'>1 John 4:19 ꣑ৎ We love because he first loved us.</p>")
 
 # encode letter image to base64 for inline display
 def get_base64_image(image_path):
     with open(image_path, "rb") as img_file:
         return base64.b64encode(img_file.read()).decode()
 
-letter_img_base64 = get_base64_image("letter.png")
-st.markdown(f"<h2 style='text-align: center;'>You are <em>firstloved</em>, open it <img src='data:image/png;base64,{letter_img_base64}' width='30' style='vertical-align: middle;'> today.</h2>", unsafe_allow_html=True)
-# note: #1866cc
+emoji_img_base64 = get_base64_image("reading.png")
+st.html(f"<h1 class='nanum-pen-script-regular front-title'>You are firstloved, read <img src='data:image/png;base64,{emoji_img_base64}' width='28'> today.</h1>")
 
 
 # sidebar!
@@ -416,7 +277,7 @@ with st.sidebar:
     except:
         user_tz = ZoneInfo("America/Los_Angeles")
     now = datetime.now(user_tz)
-    st.markdown(f"<p style='color: #333;'>It's {now.strftime('%I:%M%p').lstrip('0')} on a {now.strftime('%A')} & you just recieved a letter. Ask Claude where to start reading ˚꩜｡</p>", unsafe_allow_html=True)
+    st.html(f"<p>It's {now.strftime('%I:%M%p').lstrip('0')} on a {now.strftime('%A')} & you just recieved a letter. Ask Claude where to start reading ˚꩜｡</p>")
 
 
     # check if user is logged in , display dif things
@@ -445,15 +306,15 @@ with st.sidebar:
             auth_modal()
 
     st.markdown("---")
-    st.header("Search Instructions")
+    st.html("<h2 class='nanum-pen-script-regular'>Search Instructions</h2>")
     st.markdown("""
-    - Search an **entire chapter** like :gray[**Philippians 4**]
+    - Search an **entire chapter** like :red[**Philippians 4**]
     
-    - Search a **single verse** like :gray[**Jeremiah 29:11**]
+    - Search a **single verse** like :red[**Jeremiah 29:11**]
     
-    - Search for a **range of verses** like :gray[**Matthew 6:25-34**]
+    - Search for a **range of verses** like :red[**Matthew 6:25-34**]
     
-    - Search for **multiple chapters** like :gray[**John 3:16-4:10**]
+    - Search for **multiple chapters** like :red[**John 3:16-4:10**]
     
     """)
     
@@ -470,11 +331,11 @@ with st.sidebar:
             
     # footer
     st.markdown("---")
-    st.markdown("""
-                <div class='sidebar-footer' style='color: gray;'>
-                <small>Made with ♡ by <a href="https://github.com/wrufay/first-loved" target="_blank" style="color: gray; text-decoration: none;">Fay Wu</a></small>
+    st.html("""
+                <div class='sidebar-footer'>
+                <small>Made with ♡ by <a href="https://github.com/wrufay/first-loved" target="_blank">Fay Wu</a></small>
                 </div>
-                """, unsafe_allow_html=True)
+                """)
     
     
 st.write("")
@@ -511,7 +372,7 @@ with btn_col1:
         st.session_state.show_ai_chat = not st.session_state.show_ai_chat
         st.rerun()
 with btn_col2:
-    search_button = st.button("Search passage ⭑.ᐟ", use_container_width=True)
+    search_button = st.button("Search passage", use_container_width=True)
     
 
 # get the verse with bible api
@@ -562,7 +423,7 @@ def display_verse(bible_content, translation="kjv"):
 
         enduring_word_path = f'https://enduringword.com/bible-commentary/{pr}{ch}-{ve}/'
         for v in bible_content["verses"]:
-            st.markdown(f'<p style="text-align: left; color: #333;"><code>{v["verse"]}</code> {v["text"]}</p>', unsafe_allow_html=True)
+            st.html(f'<p class="bible-text"><code>{v["verse"]}</code> {v["text"]}</p>')
 
             
         st.markdown("---")

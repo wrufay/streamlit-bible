@@ -1,0 +1,154 @@
+@import url("https://fonts.googleapis.com/css2?family=Shizuru&family=Yomogi&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding:wght@400;700&family=Nanum+Gothic:wght@400;700;800&family=Nanum+Myeongjo:wght@400;700;800&family=Nanum+Pen+Script&display=swap");
+
+/* colour variables */
+
+:root {
+  --olive: #af9164;
+  --gray: #b3b6b7;
+  --red: #6f1a07;
+  --brown: #2b2118;
+  --offwhite: #f7f3e3;
+}
+
+/* font classes */
+.shizuru {
+  font-family: "Shizuru", cursive;
+}
+
+/* For Yomogi font */
+.yomogi {
+  font-family: "Yomogi", cursive;
+}
+
+/* serif */
+.nanum-myeongjo-regular {
+  font-family: "Nanum Myeongjo", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.nanum-myeongjo-bold {
+  font-family: "Nanum Myeongjo", serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.nanum-myeongjo-extrabold {
+  font-family: "Nanum Myeongjo", serif;
+  font-weight: 800;
+  font-style: normal;
+}
+
+/* pen script */
+.nanum-pen-script-regular {
+  font-family: "Nanum Pen Script", cursive;
+  font-weight: 400;
+  font-style: normal;
+  margin-bottom: -10px;
+}
+
+/* coding font */
+.nanum-gothic-coding-regular {
+  font-family: "Nanum Gothic Coding", monospace;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.nanum-gothic-coding-bold {
+  font-family: "Nanum Gothic Coding", monospace;
+  font-weight: 700;
+  font-style: normal;
+}
+
+/* sans-serif */
+.nanum-gothic-regular {
+  font-family: "Nanum Gothic", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.nanum-gothic-bold {
+  font-family: "Nanum Gothic", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.nanum-gothic-extrabold {
+  font-family: "Nanum Gothic", sans-serif;
+  font-weight: 800;
+  font-style: normal;
+}
+
+/*hide the ai profile pictures*/
+[data-testid="stChatMessageAvatarUser"],
+[data-testid="stChatMessageAvatarAssistant"],
+.stChatMessage img,
+.stChatMessage svg {
+  display: none !important;
+}
+/*hide the text inside the feedback form (too crowded)*/
+.stForm [data-testid="stFormSubmitButton"]::after {
+  display: none !important;
+}
+.stForm small {
+  display: none !important;
+}
+
+/* remove background from user messages */
+[data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarUser"]) {
+  background-color: transparent !important;
+}
+[data-testid="stChatMessage"] [data-testid="stChatMessageContent"] {
+  background-color: transparent !important;
+}
+.stChatMessage:has([data-testid="stChatMessageAvatarUser"]) {
+  background-color: transparent !important;
+}
+.stChatMessage:has([data-testid="stChatMessageAvatarUser"]) > div {
+  background-color: transparent !important;
+}
+
+* {
+  transition: all 0.5s ease;
+  font-family: "yomogi", serif;
+}
+
+/* Center align main content area only, not sidebar */
+section[data-testid="stMain"] .block-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* section[data-testid="stSidebar"] {
+  background-color: var(--offwhite);
+} */
+
+h1 {
+  font-size: 2.8rem;
+}
+.bible-text {
+  text-align: left;
+  padding: 8px;
+  background: rgb(255, 255, 255, 0.41);
+  border-radius: 8px;
+  /* cursor: pointer; */
+}
+.bible-text:hover {
+  cursor: pointer;
+  background: white;
+}
+/* Target Streamlit text inputs */
+input[type="text"],
+input[type="password"],
+input[type="email"],
+.stTextInput > div > div > input {
+  font-family: "yomogi", monospace !important;
+}
+
+/* Target Streamlit selectbox */
+.stSelectbox > div > div > div {
+  font-family: "yomogi", monospace !important;
+}
