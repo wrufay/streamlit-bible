@@ -22,7 +22,7 @@ SUPABASE_URL = os.getenv("SUPABASE_URL") or st.secrets.get("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY") or st.secrets.get("SUPABASE_KEY")
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-st.set_page_config(page_title="Bible App", page_icon="flower.png", layout="centered", initial_sidebar_state="expanded")
+st.set_page_config(page_title="First Loved Bible", page_icon="flower.png", layout="centered", initial_sidebar_state="expanded")
 
 # login authentication featurss
 def init_auth_state():
